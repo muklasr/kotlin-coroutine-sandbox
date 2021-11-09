@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.muklasr.coroutine.CoroutineScopeTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2021-11-08T15:17:53" hostname="DESKTOP-AH03L5S" time="1.379">
+  <properties/>
+  <testcase name="testCoroutineScopeFunction()" classname="com.muklasr.coroutine.CoroutineScopeTest" time="1.379"/>
+  <system-out><![CDATA[Result = 20
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
