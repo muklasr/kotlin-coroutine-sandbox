@@ -2,6 +2,7 @@ package com.muklasr.coroutine
 
 import kotlinx.coroutines.*
 import org.junit.jupiter.api.Test
+import java.util.concurrent.Executors
 import kotlin.system.measureTimeMillis
 
 @DelicateCoroutinesApi
@@ -52,6 +53,25 @@ class SequentialSuspendFunctionTest {
                 joinAll(job1, job2)
             }
             println("Total time: $time")
+        }
+    }
+
+    suspend fun runJob(number: Int) {
+        println("Start job $number in thread ${Thread.currentThread().name}")
+        yield()
+        println("Finish job $number in thread ${Thread.currentThread().name}")
+    }
+
+    @Test
+    fun testYieldFunction() {
+        val dispatcher = Executors.newFixedThreadPool(10).asCoroutineDispatcher()
+        val scope = CoroutineScope(dispatcher)
+
+        runBlocking {
+            scope.launch { runJob(1) }
+            scope.launch { runJob(2) }
+
+            delay(2_000)
         }
     }
 }

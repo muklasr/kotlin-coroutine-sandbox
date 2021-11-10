@@ -2,6 +2,7 @@ package com.muklasr.coroutine
 
 import kotlinx.coroutines.*
 import org.junit.jupiter.api.Test
+import java.util.concurrent.Executors
 
 class CoroutineScopeTest {
 
@@ -70,6 +71,45 @@ class CoroutineScopeTest {
 
         runBlocking {
             job.join()
+        }
+    }
+
+    @Test
+    fun testParentChildDispatcher() {
+        val dispatcher = Executors.newFixedThreadPool(10).asCoroutineDispatcher()
+        val scope = CoroutineScope(dispatcher)
+
+        val job = scope.launch {
+            println("Parent scope : ${Thread.currentThread().name}")
+            coroutineScope {
+                launch {
+                    println("Child scope : ${Thread.currentThread().name}")
+                }
+            }
+        }
+
+        runBlocking {
+            job.join()
+        }
+    }
+
+    @Test
+    fun testParentChildCancel() {
+        val dispatcher = Executors.newFixedThreadPool(10).asCoroutineDispatcher()
+        val scope = CoroutineScope(dispatcher)
+
+        val job = scope.launch {
+            println("Parent scope : ${Thread.currentThread().name}")
+            coroutineScope {
+                launch {
+                    delay(2_000)
+                    println("Child scope : ${Thread.currentThread().name}")
+                }
+            }
+        }
+
+        runBlocking {
+            job.cancelAndJoin()
         }
     }
 }
